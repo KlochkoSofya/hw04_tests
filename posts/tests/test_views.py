@@ -72,7 +72,7 @@ class PostViewsTests(TestCase):
         form_fields = {
             'text': forms.fields.CharField,
             'group': forms.fields.ChoiceField
-         }
+        }
 
         for fiels_name, expected in form_fields.items():
             with self.subTest(value=fiels_name):
@@ -142,7 +142,7 @@ class PostViewsTests(TestCase):
             with self.subTest(reverse_name=reverse_name):
                 response = self.guest_client.get(reverse_name)
                 self.assertEqual(response.status_code, expected)
-  
+
     def test_about_page_uses_correct_template(self):
 
         templates_pages_names = {

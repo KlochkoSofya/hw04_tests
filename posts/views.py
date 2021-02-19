@@ -44,10 +44,11 @@ def profile(request, username):
     page = paginator.get_page(page_number)
     context = {'page': page, 'author': author, 'author_posts': author_posts, 'paginator': paginator}
     return render(request, 'posts/profile.html', context)
- 
+
+
 def post_view(request, username, post_id):
-    author = get_object_or_404(User, username = username)
-    needed_post = get_object_or_404(Post, id = post_id, author__username = username)
+    author=get_object_or_404(User, username=username)
+    needed_post=get_object_or_404(Post, id=post_id, author__username=username)
     context = {'author': author, 'post': needed_post}
     return render(request, 'posts/post.html', context)
 
@@ -57,7 +58,7 @@ def post_edit(request, username, post_id):
     author = get_object_or_404(User, username=username)
     post = get_object_or_404(Post, id=post_id)
     if request.user != author:
-        return redirect ('post', username=username, post_id=post_id)
+        return redirect('post', username=username, post_id=post_id)
     form = PostForm(request.POST or None, instance=post)
     if form.is_valid():
         form.save()

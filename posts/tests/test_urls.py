@@ -27,9 +27,9 @@ class PostURLTests(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.test_author=User.objects.create_user(username='username')
-        cls.group=Group.objects.create(title='Название', slug='slug', description='описание')
-        cls.post=Post.objects.create(
+        cls.test_author = User.objects.create_user(username='username')
+        cls.group = Group.objects.create(title='Название', slug='slug', description='описание')
+        cls.post = Post.objects.create(
             text='Текст',
             author=cls.test_author,
             group=cls.group
