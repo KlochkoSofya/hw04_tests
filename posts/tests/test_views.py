@@ -22,8 +22,8 @@ class PostViewsTests(TestCase):
             group=cls.group_1
         )
         all_posts = []
-        for i in range (0, 12, 1):
-            all_posts.append(Post(text ='Тестовый пост' + str(i), author =cls.test_author))
+        for i in range(0, 12, 1):
+            all_posts.append(Post(text='Тестовый пост' + str(i), author=cls.test_author))
         Post.objects.bulk_create(all_posts)
 
     def setUp(self):
@@ -101,13 +101,13 @@ class PostViewsTests(TestCase):
         response = self.authorized_client.get(reverse("index"))
         main_page = response.context.get('page')
         self.assertIn(self.post, main_page)
-    
+
     def test_edit_page_show_correct_context(self):
         response = self.editor_client.get('/username/1/edit/')
         form_fields = {
             'text': forms.fields.CharField,
             'group': forms.fields.ChoiceField
-         }
+        }
 
         for fiels_name, expected in form_fields.items():
             with self.subTest(value=fiels_name):
@@ -137,14 +137,14 @@ class PostViewsTests(TestCase):
         about_list = {
             reverse('about:author'): 200,
             reverse('about:tech'): 200
-         }
+        }
         for reverse_name, expected in about_list.items():
             with self.subTest(reverse_name=reverse_name):
                 response = self.guest_client.get(reverse_name)
                 self.assertEqual(response.status_code, expected)
-        
+  
     def test_about_page_uses_correct_template(self):
-        
+
         templates_pages_names = {
             'about/author.html': reverse('about:author'),
             'about/tech.html': reverse('about:tech'),

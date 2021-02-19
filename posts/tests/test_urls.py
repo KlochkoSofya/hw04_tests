@@ -27,16 +27,14 @@ class PostURLTests(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        # Создадим запись в БД для проверки доступности адреса 
-        cls.test_author = User.objects.create_user(username='username')
-        cls.group = Group.objects.create(title ='Название', slug ='slug', description ='описание')
-        cls.post = Post.objects.create(
+        cls.test_author=User.objects.create_user(username='username')
+        cls.group=Group.objects.create(title='Название', slug='slug', description='описание')
+        cls.post=Post.objects.create(
             text='Текст',
             author=cls.test_author,
             group=cls.group
         )
-  
- 
+
     def setUp(self):
         # Создаем неавторизованный клиент
         self.guest_client = Client()
@@ -48,7 +46,7 @@ class PostURLTests(TestCase):
         self.authorized_client.force_login(self.user)
         self.editor_client = Client()
         self.editor_client.force_login(PostURLTests.test_author)
-              
+
     def test_urls_exists_at_desired_location_for_auth(self):
         # URL-адрес работает для авториз пользователя."""
         url_names = {
@@ -70,7 +68,7 @@ class PostURLTests(TestCase):
             '/username/': 200,
             '/username/1/': 200,
         }
-    
+
         for url, result_code in url_names.items():
             with self.subTest():
                 response = self.guest_client.get(url)
@@ -91,11 +89,11 @@ class PostURLTests(TestCase):
     def test_urls_uses_correct_template(self):
         # URL-адрес использует соответствующий шаблон."""
         templates_url_names = {
-            'posts/group.html': '/group/slug/',
-            'posts/new.html': '/new/',
-            'posts/new.html':'/username/1/edit/',
+            '/group/slug/': 'posts/group.html',
+            '/new/': 'posts/new.html',
+            '/username/1/edit/': 'posts/new.html'
         }
-        for template, reverse_name in templates_url_names.items():
+        for reverse_name, template in templates_url_names.items():
             with self.subTest():
                 response = self.editor_client.get(reverse_name)
                 self.assertTemplateUsed(response, template)

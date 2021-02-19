@@ -11,8 +11,8 @@ class PostModelTest(TestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.author = User.objects.create(username='testuser')
-        cls.group = Group.objects.create (title='Название', slug='слаг', description='описание')
-        cls.post = Post.objects.create( text='Текст', pub_date='дата', author=cls.author, group=cls.group)
+        cls.group = Group.objects.create(title='Название', slug='слаг', description='описание')
+        cls.post = Post.objects.create(text='Текст', pub_date='дата', author=cls.author, group=cls.group)
         cls.post = Post.objects.get(id=1)
         cls.group = Group.objects.get(id=1)
 
@@ -44,7 +44,7 @@ class PostModelTest(TestCase):
         }
         for value, expected in field_verboses.items():
             with self.subTest(value=value):
-                self.assertEqual(group._meta.get_field(value).verbose_name, expected)               
+                self.assertEqual(group._meta.get_field(value).verbose_name, expected)
 
     def test_group_help_texts(self):
         """help_text для group."""

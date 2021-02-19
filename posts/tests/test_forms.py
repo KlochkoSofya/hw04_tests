@@ -16,8 +16,8 @@ class PostCreateFormTests(TestCase):
         cls.group = Group.objects.create(title='Группа', slug='test-slug')
         cls.post = Post.objects.create(
             text='Текст',
-            author = User.objects.create_user(username='StasBasov'),
-            group = cls.group
+            author=User.objects.create_user(username='StasBasov'),
+            group=cls.group
         )
 
     def setUp(self):
@@ -33,18 +33,17 @@ class PostCreateFormTests(TestCase):
         form_data = {
             'author': self.authorized_client,
             'text': 'Текст',
-            'group': Group.objects.get(slug ='test-slug').id
+            'group': Group.objects.get(slug='test-slug').id
         }
         # Отправляем POST-запрос
         response = self.authorized_client.post(reverse('new_post'), data=form_data, follow=True)
         # Проверяем, увеличилось ли число постов
-        self.assertEqual(Post.objects.count(), posts_count+1)
+        self.assertEqual(Post.objects.count(), posts_count + 1)
         self.assertEqual(response.status_code, 200)
 
     def test_edit_post(self):
 
-        form_data={'text':'Отредактированный текст'}
-        response = self.authorized_client.post(
-            reverse('post_edit', args = [self.user.username, self.post.id]), data = form_data, follow=True)
+        form_data = {'text': 'Отредактированный текст'}
+        self.authorized_client.post(
+            reverse('post_edit', args=[self.user.username, self.post.id]), data=form_data, follow=True)
         self.assertEqual(Post.objects.filter(id=self.post.id).last().text, 'Отредактированный текст')
-        
