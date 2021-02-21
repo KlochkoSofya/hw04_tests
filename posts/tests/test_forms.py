@@ -43,7 +43,7 @@ class PostCreateFormTests(TestCase):
 
     def test_edit_post(self):
 
-        form_data = {'text': 'Отредактированный текст'}
+        form_data = {'text': 'Текст'}
         self.authorized_client.post(
             reverse('post_edit', args=[self.user.username, self.post.id]), data=form_data, follow=True)
-        self.assertEqual(Post.objects.filter(id=self.post.id).last().text, 'Отредактированный текст')
+        self.assertEqual(Post.objects.filter(id=self.post.id).last().text, 'Текст')

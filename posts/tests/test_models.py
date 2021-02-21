@@ -11,10 +11,10 @@ class PostModelTest(TestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.author = User.objects.create(username='testuser')
-        cls.group = Group.objects.create(title='Название', slug='слаг', description='описание')
-        cls.post = Post.objects.create(text='Текст', pub_date='дата', author=cls.author, group=cls.group)
-        cls.post = Post.objects.get(id=1)
-        cls.group = Group.objects.get(id=1)
+        cls.group = Group.objects.create(id=1, title='Название', slug='слаг', description='описание')
+        cls.post = Post.objects.create(id=1, text='Текст', pub_date='дата', author=cls.author, group=cls.group)
+        #cls.post = Post.objects.get(id=1)
+        #cls.group = Group.objects.get(id=1)
 
     def test_post_verbose_name(self):
         """verbose_name для post."""

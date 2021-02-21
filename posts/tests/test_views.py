@@ -53,9 +53,10 @@ class PostViewsTests(TestCase):
 
     def test_main_page_show_correct_context(self):
         response = self.guest_client.get(reverse('index'))
-        post_text_0 = response.context.get('page')[0].text
-        post_author_0 = response.context.get('page')[0].author
-        post_group_0 = response.context.get('page')[0].group
+        post_info_0 = response.context.get('page')[0]
+        post_text_0 = post_info_0.text
+        post_author_0 = post_info_0.author
+        post_group_0 = post_info_0.group
         self.assertEqual(post_text_0, 'Текст')
         self.assertEqual(post_author_0.username, 'username')
         self.assertEqual(post_group_0.title, 'Группа-1')
@@ -116,18 +117,20 @@ class PostViewsTests(TestCase):
 
     def test_profile_page_show_correct_context(self):
         response = self.guest_client.get(reverse('profile', args={'username'}))
-        post_text_0 = response.context.get('page')[0].text
-        post_author_0 = response.context.get('page')[0].author
-        post_group_0 = response.context.get('page')[0].group
+        post_info_0 = response.context.get('page')[0]
+        post_text_0 = post_info_0.text
+        post_author_0 = post_info_0.author
+        post_group_0 = post_info_0.group
         self.assertEqual(post_text_0, 'Текст')
         self.assertEqual(post_author_0.username, 'username')
         self.assertEqual(post_group_0.title, 'Группа-1')
 
     def test_post_page_show_correct_context(self):
         response = self.guest_client.get('/username/1/')
-        post_text = response.context.get('post').text
-        post_author = response.context.get('post').author
-        post_group = response.context.get('post').group
+        post_info = response.context.get('post')
+        post_text = post_info.text
+        post_author = post_info.author
+        post_group = post_info.group
         self.assertEqual(post_text, 'Текст')
         self.assertEqual(post_author.username, 'username')
         self.assertEqual(post_group.title, 'Группа-1')

@@ -47,20 +47,20 @@ def profile(request, username):
 
 
 def post_view(request, username, post_id):
-    author = get_object_or_404(User, username=username)
-    needed_post = get_object_or_404(Post, id=post_id, author__username=username)
-    context = {'author': author, 'post': needed_post}
+    # author = get_object_or_404(User, username=username)
+    needed_post = get_object_or_404(Post, author__username=username, id=post_id)
+    context = {'author': needed_post.author, 'post': needed_post}
     return render(request, 'posts/post.html', context)
 
 
 @login_required
 def post_edit(request, username, post_id):
-    author = get_object_or_404(User, username=username)
-    post = get_object_or_404(Post, id=post_id)
-    if request.user != author:
+    # author = get_object_or_404(User, username=username)
+    post = get_object_or_404(Post, author__username=username, id=post_id)
+    if request.user != post.author:
         return redirect('post', username=username, post_id=post_id)
     form = PostForm(request.POST or None, instance=post)
     if form.is_valid():
         form.save()
         return redirect('post', username=username, post_id=post_id)
-    return render(request, 'posts/new.html', {'post': post, 'form': form})
+    return render(request, 'posts/new.html', {'post': post, 'form': form, 'edit': True})
