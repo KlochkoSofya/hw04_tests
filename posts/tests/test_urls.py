@@ -54,7 +54,7 @@ class PostURLTests(TestCase):
             reverse('group_posts', args={'slug'}): 200,
             reverse('new_post'): 200,
             reverse('profile', args={'username'}): 200,
-            reverse('post', args={'username', 1}): 200,
+            reverse('post', args=['username', 1]): 200,
         }
         for reverse_name, result_code in url_names.items():
             with self.subTest():
@@ -67,7 +67,7 @@ class PostURLTests(TestCase):
             reverse('group_posts', args={'slug'}): 200,
             reverse('new_post'): 302,
             reverse('profile', args={'username'}): 200,
-            reverse('post', args={'username', 1}): 200,
+            reverse('post', args=['username', 1]): 200,
         }
 
         for reverse_name, result_code in url_names.items():
@@ -76,15 +76,15 @@ class PostURLTests(TestCase):
                 self.assertEqual(response.status_code, result_code)
 
     def test_urls_exists_at_desired_location_for_edit_author(self):
-        response = self.editor_client.get(reverse('post_edit', args={'username', 1}))
+        response = self.editor_client.get(reverse('post_edit', args=['username', 1]))
         self.assertEqual(response.status_code, 200)
 
     def test_urls_exists_at_desired_location_for_edit_guest(self):
-        response = self.guest_client.get(reverse('post_edit', args={'username', 1}))
+        response = self.guest_client.get(reverse('post_edit', args=['username', 1]))
         self.assertEqual(response.status_code, 302)
 
     def test_urls_exists_at_desired_location_for_edit_notauthor(self):
-        response = self.authorized_client.get(reverse('post_edit', args={'username', 1}))
+        response = self.authorized_client.get(reverse('post_edit', args=['username', 1]))
         self.assertEqual(response.status_code, 302)
 
     def test_urls_uses_correct_template(self):
@@ -92,7 +92,7 @@ class PostURLTests(TestCase):
         templates_url_names = {
             reverse('group_posts', args={'slug'}): 'posts/group.html',
             reverse('new_post'): 'posts/new.html',
-            reverse('post_edit', args={'username', 1}): 'posts/new.html'
+            reverse('post_edit', args=['username', 1]): 'posts/new.html'
         }
         for reverse_name, template in templates_url_names.items():
             with self.subTest():
@@ -100,9 +100,9 @@ class PostURLTests(TestCase):
                 self.assertTemplateUsed(response, template)
 
     def test_redirect_for_guest_when_edit(self):
-        response = self.guest_client.get(reverse('post_edit', args={'username', 1}), follow=True)
+        response = self.guest_client.get(reverse('post_edit', args=['username', 1]), follow=True)
         self.assertRedirects(response, '/auth/login/?next=/username/1/edit/')
 
     def test_redirect_for_client_notauthor_when_edit(self):
-        response = self.authorized_client.get(reverse('post_edit', args={'username', 1}), follow=True)
+        response = self.authorized_client.get(reverse('post_edit', args=['username', 1]), follow=True)
         self.assertRedirects(response, '/username/1/')
